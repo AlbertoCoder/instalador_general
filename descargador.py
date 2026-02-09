@@ -1,15 +1,17 @@
 import requests
+import barra_progreso
 
 class Descargador:
 
+    barra_progreso = barra_progreso.BarraProgreso()
+
+
     def descargar_archivo(self,url,nombre_archivo_local):
         
-
         # Transmitir el contenido para evitar cargar el archivo entero en memoria:
         with requests.get(url, stream=True) as solicitud:
-            
-            tamanyo_total = int(solicitud.headers.get('content-length',0))
-            tamanyo_trozo = 1024
+             
+            tamanyo_archivo = int(solicitud.headers.get('content-length'),0) 
             descargado = 0
 
             try:
@@ -18,12 +20,12 @@ class Descargador:
                 
                 with open(nombre_archivo_local, 'wb') as archivo:
                     
-                    for trozo in solicitud.iter_content(chunk_size=tamanyo_trozo):
+                    for trozo in solicitud.iter_content(chunk_size=1024):
                         if trozo: # Filtrar trozos 'vivos'
                             archivo.write(trozo)
+
                             descargado+=len(trozo)
-                            completado = int(50*descargado/tamanyo_total) if tamanyo_total else 0
-                            print(f"\r[{'\u2588'*completado}{'.'*(50-completado)}] {round(descargado/1024/1024)}/{round(tamanyo_total/1024/1024)} MB", end='')
+                            self.barra_progreso.imprimir_progreso(trozo, tamanyo_archivo, descargado) 
                     print(f"\nArchivo descargado y guardado en {nombre_archivo_local}")
                     
             except requests.exceptions.HTTPError as err:
