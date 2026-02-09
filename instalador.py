@@ -1,4 +1,5 @@
 import sys
+import os
 from descargador import Descargador
 from descompresor import Descompresor_tar_gz
 
@@ -22,15 +23,19 @@ def instalar(url,nombre_archivo_local):
 
     descompresor.descomprimir()
 
+def limpiar_pantalla():
+
+    if os.name=='nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 def main():
 
-    print("Nombre del script: ",sys.argv[0])
 
     if len(sys.argv) > 1:
 
-        print("Archivo de urls:")
-        print(sys.argv[1])
+        print(f"Archivo de urls: {sys.argv[1]}")
 
         abrir_archivo_urls(sys.argv[1])
 
@@ -42,6 +47,8 @@ def main():
         print("Debes introducir el argumento de ruta del archivo de rutas.")
 
 if __name__ == "__main__":
+
+    limpiar_pantalla() 
 
     main()
 

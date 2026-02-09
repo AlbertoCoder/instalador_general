@@ -23,11 +23,9 @@ class Descargador:
                             archivo.write(trozo)
                             descargado+=len(trozo)
                             completado = int(50*descargado/tamanyo_total) if tamanyo_total else 0
-                            print(f"\r[{'<'*completado}{'.'*(50-completado)}] {descargado}/{tamanyo_total} bytes", end='')
-                    print(f"Archivo descargado y guardado en {nombre_archivo_local}")
+                            print(f"\r[{'\u2588'*completado}{'.'*(50-completado)}] {round(descargado/1024/1024)}/{round(tamanyo_total/1024/1024)} MB", end='')
+                    print(f"\nArchivo descargado y guardado en {nombre_archivo_local}")
                     
             except requests.exceptions.HTTPError as err:
 
                 print(f"La URL es incorrecta: {err}")
-
-
