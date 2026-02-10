@@ -1,25 +1,26 @@
 import tarfile
+import sys
+import barra_progreso
+import os
 
 class Descompresor_tar_gz:
 
+    def descomprimir(self,ruta_tar,ruta_extracc):
 
-    ruta_tar_gz = ""
-    ruta_extracc = ""
+        with tarfile.open(ruta_tar, "r:gz") as tar:
 
-    def establecer_archivo(self,ruta_archivo,ruta_extracc):
+            try:
 
-        self.ruta_tar_gz = ruta_archivo
-        self.ruta_extracc = ruta_extracc
+                miembros = tar.getmembers()
+                total_archivos = len(miembros)
 
+                for i, miembro in enumerate(miembros, start=1):
+                    tar.extract(miembro,path=ruta_extracc)
+                    progreso = (i/total_archivos) * 100
+                    sys.stdout.write(f"\rExtrayendo: {progreso:.2f}% ({i}/{total_archivos})")
+                    sys.stdout.flush()
 
-    def descomprimir(self):
+                print(f"\n¡Extracción completa en {ruta_extracc}!")
+            except:
 
-        try:
-
-            with tarfile.open(self.ruta_tar_gz, "r:gz") as tar:
-                tar.extractall(path=self.ruta_extracc)
-                print(f"Archivos extraidos en {self.ruta_extracc}")
-
-        except:
-
-            print("Ocurrió un error al extraer los archivos.")
+                print(f"Hubo un error al extraer en {ruta_extracc}")

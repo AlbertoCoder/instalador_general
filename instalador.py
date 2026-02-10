@@ -19,9 +19,9 @@ def instalar(url,nombre_archivo_local):
 
     descompresor = Descompresor_tar_gz()
 
-    descompresor.establecer_archivo(nombre_archivo_local, "/opt/")
+    descompresor.descomprimir(nombre_archivo_local, "/opt/")
 
-    descompresor.descomprimir()
+    os.remove(nombre_archivo_local)
 
 def limpiar_pantalla():
 
@@ -51,10 +51,3 @@ if __name__ == "__main__":
     limpiar_pantalla() 
 
     main()
-
-
-
-
-
-
-
